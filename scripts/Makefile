@@ -9,8 +9,6 @@ export SLACK_KEY = $(shell sed -n -e '/^SLACK_KEY/p' ${configuration_file} | cut
 export GEOCINT_WORK_DIRECTORY = $(shell sed -n -e '/^GEOCINT_WORK_DIRECTORY/p' ${configuration_file} | cut -d "=" -f 2)
 export CUSTOM_PART_FOLDER_NAME = $(shell sed -n -e '/^CUSTOM_PART_FOLDER_NAME/p' ${configuration_file} | cut -d "=" -f 2)
 
-echo 'export GEOCINT_WORK_DIRECTORY=${GEOCINT_WORK_DIRECTORY}' >> ${HOME}/.bashrc
-
 # -------------------- PREPARATIONS BLOCK -----------------------------------
 
 ${GEOCINT_WORK_DIRECTORY}: ## create working directory
@@ -62,7 +60,7 @@ ${GEOCINT_WORK_DIRECTORY}/geocint/installation/set_modes: ${GEOCINT_WORK_DIRECTO
 
 
 ${GEOCINT_WORK_DIRECTORY}/geocint/installation/web_dashboard_installation: ${GEOCINT_WORK_DIRECTORY}/geocint/installation/set_modes ${GEOCINT_WORK_DIRECTORY}/geocint/installation/runner_installer
-	profile_make_init_viewer -o=${GEOCINT_WORK_DIRECTORY}/public_html
+	profile_make_init_viewer -o= ${GEOCINT_WORK_DIRECTORY}/public_html
 	ln -s ${GEOCINT_WORK_DIRECTORY}/geocint/report.json  ${GEOCINT_WORK_DIRECTORY}/public_html/report.json
 	ln -s ${GEOCINT_WORK_DIRECTORY}/geocint/make.svg  ${GEOCINT_WORK_DIRECTORY}/public_html/make.svg
 	ln -s ${GEOCINT_WORK_DIRECTORY}/geocint/logs  ${GEOCINT_WORK_DIRECTORY}/public_html/logs
