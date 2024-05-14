@@ -83,7 +83,7 @@ trap 'cleanup' EXIT
 cd ${GEOCINT_WORK_DIRECTORY}
 # Merge geocint-runner, geocint-openstreetmap and your private repo to one folder and check duplicated files
 # This script uses ALLOW_DUPLICATE_FILES variable from confic.inc.sh (by default it ignores README.md and LICENSE files in a root of every repo)
-copy_message="$(python geocint-runner/scripts/merge_repos_and_check_duplicates.py geocint-runner $CUSTOM_PART_FOLDER_NAME)"
+copy_message="$(python geocint-runner/scripts/merge_repos_and_check_duplicates.py geocint-runner geocint-mapaction-osm $CUSTOM_PART_FOLDER_NAME)"
 
 # This script sends 2 different messages. 
 # check if the message starts with "Copy..". Then copying was successful. 
