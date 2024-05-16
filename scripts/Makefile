@@ -21,7 +21,7 @@ ${GEOCINT_WORK_DIRECTORY}/geocint/installation: | ${GEOCINT_WORK_DIRECTORY}/geoc
 	mkdir -p $@
 
 ${GEOCINT_WORK_DIRECTORY}/geocint/installation/add_congig_file_path_to_bashrc: | ${GEOCINT_WORK_DIRECTORY}/geocint/installation ## write export variable to bashrc file
-	sudo echo 'export GEOCINT_WORK_DIRECTORY=${GEOCINT_WORK_DIRECTORY}' >> ${HOME}/.bashrc
+	echo 'export GEOCINT_WORK_DIRECTORY=${GEOCINT_WORK_DIRECTORY}' >> ${HOME}/.bashrc
 	touch $@
 
 ${GEOCINT_WORK_DIRECTORY}/geocint/installation/preparation_block_finished: ${GEOCINT_WORK_DIRECTORY}/geocint/installation/add_congig_file_path_to_bashrc ## send message that preparation step finished successfully
@@ -50,11 +50,11 @@ ${GEOCINT_WORK_DIRECTORY}/geocint/installation/installation_block_finished: ${GE
 # ------------------------ WEB Dashboard installation block ----------------------------
 
 ${GEOCINT_WORK_DIRECTORY}/geocint/installation/set_modes: ${GEOCINT_WORK_DIRECTORY}/geocint/installation/preparation_block_finished  ## create public_html folder and set access
-	sudo usermod -aG adm ${USER}
-	sudo usermod -aG ${USER} www-data
-	sudo mkdir -p ${GEOCINT_WORK_DIRECTORY}/public_html
-	sudo chown ${USER}:${USER} ${GEOCINT_WORK_DIRECTORY}/public_html
-	sudo chmod 0750 ${GEOCINT_WORK_DIRECTORY}/public_html
+	usermod -aG adm ${USER}
+	usermod -aG ${USER} www-data
+	mkdir -p ${GEOCINT_WORK_DIRECTORY}/public_html
+	chown ${USER}:${USER} ${GEOCINT_WORK_DIRECTORY}/public_html
+	chmod 0750 ${GEOCINT_WORK_DIRECTORY}/public_html
 	echo 'GEOCINT_WORK_DIRECTORY=${GEOCINT_WORK_DIRECTORY}' | sudo tee -a /etc/environment
 	touch $@
 
