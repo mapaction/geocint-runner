@@ -30,4 +30,4 @@ https://tldp.org/LDP/abs/html/
 - GDAL, OGR, osm-c-tools, osmium, and other tools are utilized in Bash CLI as needed.
 
 
-[Install, first run guides and best practices](DOCUMENTATION.md) 
+[Install, first run guides and best practices](DOCUMENTATION.md)
