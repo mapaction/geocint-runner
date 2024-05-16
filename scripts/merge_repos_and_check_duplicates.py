@@ -9,11 +9,11 @@ from re import search
 
 if len(sys.argv) < 2:
     print(
-        'usage: merge_repos_and_check_duplicates.py [geocint-runner] [geocint-openstreetmap] [your private repo]'
+        'usage: merge_repos_and_check_duplicates.py [geocint-runner] [geocint-mapaction-osm] [your private repo]'
     )
 
 runner = sys.argv[1]
-openstreetmap = sys.argv[2]
+osm = sys.argv[2]
 private = sys.argv[3]
        
 def get_files_list(directory, ignore_list):
@@ -75,7 +75,7 @@ def main():
     # create list with non-ignored files from all repositories  
     files = []    
     files += get_files_list(runner, ignore_list)
-    files += get_files_list(openstreetmap, ignore_list)
+    files += get_files_list(osm, ignore_list)
     files += get_files_list(private, ignore_list)
     
     duplicated_files = find_duplicates(files)    
@@ -86,12 +86,12 @@ def main():
     else:
         # copy folder structure
         copy_folder_structure(runner, general_folder)
-        copy_folder_structure(openstreetmap, general_folder)
+        copy_folder_structure(osm, general_folder)
         copy_folder_structure(private, general_folder)
         # copy files
         for x in files:
             shutil.copyfile(x, general_folder+'/'+'/'.join(x.split('/')[1:]))
-        sys.stdout.write(f'Copy from {runner}, {openstreetmap} and {private} to {general_folder} folder completed successfully\n')    
+        sys.stdout.write(f'Copy from {runner}, {osm} and {private} to {general_folder} folder completed successfully\n')    
  
 if __name__ == '__main__':
     main() 
