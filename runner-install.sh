@@ -2,7 +2,7 @@
 
 # Installing make-profiler
 apt install -y python3-pip graphviz gawk
-
+pip3 install slack slackclient
 pip3 install https://github.com/konturio/make-profiler/archive/master.zip
 apt-get install -y cmake
 apt install -y unzip
