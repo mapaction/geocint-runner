@@ -50,6 +50,7 @@ ${GEOCINT_WORK_DIRECTORY}/geocint/installation/installation_block_finished: ${GE
 # ------------------------ WEB Dashboard installation block ----------------------------
 
 ${GEOCINT_WORK_DIRECTORY}/geocint/installation/set_modes: ${GEOCINT_WORK_DIRECTORY}/geocint/installation/preparation_block_finished  ## create public_html folder and set access
+	usermod -aG ${USER} adm
 	usermod -aG ${USER} www-data
 	mkdir -p ${GEOCINT_WORK_DIRECTORY}/public_html
 	chown ${USER}:${USER} ${GEOCINT_WORK_DIRECTORY}/public_html
