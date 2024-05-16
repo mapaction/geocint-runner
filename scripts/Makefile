@@ -58,9 +58,11 @@ ${GEOCINT_WORK_DIRECTORY}/geocint/installation/set_modes: ${GEOCINT_WORK_DIRECTO
 
 ${GEOCINT_WORK_DIRECTORY}/geocint/installation/web_dashboard_installation: ${GEOCINT_WORK_DIRECTORY}/geocint/installation/set_modes ${GEOCINT_WORK_DIRECTORY}/geocint/installation/runner_installer
 	profile_make_init_viewer -o ${GEOCINT_WORK_DIRECTORY}/public_html
-	ln -sf ${GEOCINT_WORK_DIRECTORY}/geocint/report.json  ${GEOCINT_WORK_DIRECTORY}/public_html/report.json
-	ln -sf ${GEOCINT_WORK_DIRECTORY}/geocint/make.svg  ${GEOCINT_WORK_DIRECTORY}/public_html/make.svg
-	ln -sf ${GEOCINT_WORK_DIRECTORY}/geocint/logs  ${GEOCINT_WORK_DIRECTORY}/public_html/logs
+	ln -sf ${GEOCINT_WORK_DIRECTORY}/geocint/report.json ${GEOCINT_WORK_DIRECTORY}/public_html/
+	ln -sf ${GEOCINT_WORK_DIRECTORY}/geocint/make.svg ${GEOCINT_WORK_DIRECTORY}/public_html/
+	ln -sf ${GEOCINT_WORK_DIRECTORY}/geocint/logs ${GEOCINT_WORK_DIRECTORY}/public_html/
+	cp -r ${GEOCINT_WORK_DIRECTORY}/geocint-runner/report ${GEOCINT_WORK_DIRECTORY}/public_html/;
+	cp ${GEOCINT_WORK_DIRECTORY}/geocint-runner/index.html ${GEOCINT_WORK_DIRECTORY}/public_html/;
 	touch $@
 
 ${GEOCINT_WORK_DIRECTORY}/geocint/installation/web_dashboard_block_finished: ${GEOCINT_WORK_DIRECTORY}/geocint/installation/web_dashboard_installation  ## send message that web dashboard initialisation step finished successfully
