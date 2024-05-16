@@ -54,7 +54,7 @@ ${GEOCINT_WORK_DIRECTORY}/geocint/installation/set_modes: ${GEOCINT_WORK_DIRECTO
 	mkdir -p ${GEOCINT_WORK_DIRECTORY}/public_html
 	chown ${USER}:${USER} ${GEOCINT_WORK_DIRECTORY}/public_html
 	chmod 0750 ${GEOCINT_WORK_DIRECTORY}/public_html
-	echo 'GEOCINT_WORK_DIRECTORY=${GEOCINT_WORK_DIRECTORY}' | sudo tee -a /etc/environment
+	echo 'GEOCINT_WORK_DIRECTORY=${GEOCINT_WORK_DIRECTORY}' | tee -a /etc/environment
 	touch $@
 
 
