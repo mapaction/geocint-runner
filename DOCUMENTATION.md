@@ -19,9 +19,8 @@
 
 Geocint consists of 3 different parts:
 - [geocint-runner](https://github.com/konturio/geocint-runner) - a core part of the pipeline, includes utilities and initial Makefile
-- [geocint-openstreetmap](https://github.com/konturio/geocint-openstreetmap) - a chain of targets for downloading, updating and uploading
-to database OpenStreetMap planet dump
-- [geocint-custom] any repository that contains your additional functionality
+- [geocint-mapaction-osm](https://github.com/mapaction/geocint-mapaction) - a chain of targets for downloading, updating data/out/country_extractions/ on the geocint after build
+- [geocint-mapaction](https://github.com/mapaction/geocint-mapaction/tree/main) - an opensource geodata ETL/CI/CD pipeline 
 
 During the installation of the geocint pipeline the next folder will be created in your working directory:
 
@@ -37,10 +36,7 @@ In general case geocint folder includes the next files and folders :
 - [osm_make](runner_make) - makefile with a set of targets
 - [your_make.sample](your_make.sample) - sample makefile that shows how to integrate geocint-runner, 
 geocint-openstreetmap and your own chains of targets
-- functions/ - service SQL functions, used in more than one other file
-- procedures/ - service SQL procedures, used in more than one other file
 - [scripts/](scripts) - scripts that perform data transformation
-- tables/ - SQL-code, which generates tables
 - static_data/ - static file-based data stored in the geocint repository
 All these folders and files are removed and recreated each time the geocint pipeline starts. 
 
@@ -51,7 +47,6 @@ After running the pipeline, Makefile will create additional folders and files. T
 	- data/mid - all intermediate data (retiles, unpacks, reprojections, etc.) which can be removed after
   	each launch
 	- data/out - all generated final data (tiles, dumps, unloading for the clients, etc.)
-- db/- files - Makefile mark about executing "db/..." targets
 - deploy/ - files - Makefile mark about executing "deploy/..." targets
 - logs/ - files - files with targets execution logs
 - report/ - folder to store HTML reports.
@@ -62,30 +57,31 @@ You shouldn’t store all your input datasets in data/in/ folder. To make your d
 Also when running the pipeline Makefile will create additional files:
 - make.lock - a special file used by start_geocint.sh as a flag to check if a pipeline is running in order not to start a new one until the running pipeline is complete
 - make.svg - a file that shows a stored graphical representation of the graph with dependencies of targets
-- make_profile.db - a database used to store information about the execution of targets
 
 ## Geocint open-source installation and first run guide
 
 ### Versions
 
 Geocint is an actively developed project, so in the future we could potentially add some new features that could break your pipeline (without the necessary changes on your part).
-Therefore, we kindly ask you to use the latest release branch from the geocint-runner and geocint-openstreetmap repositories if you want to be sure that your geocint instance is reliable.
-Also, don't set the UPDATE_RUNNER and UPDATE_OSM_LOGIC variables to true if you don't want to get the latest updates from branches that are enabled in your local geocint-runner and geocint-openstreetmap repositories.
+Therefore, we kindly ask you to use the latest release branch from the geocint-runner repository if you want to be sure that your geocint instance is reliable.
+Also, don't set the UPDATE_RUNNER variable to true if you don't want to get the latest updates from branches that are enabled in your local geocint-runner.
 These features are available to developers. But you can use master and set the UPDATE_RUNNER and UPDATE_OSM_LOGIC variables to true if you want to make sure you always have the latest version of Geocint.
 
 ### Installation
 
 1. Create a working directory for Geocint pipeline. In this directory you will store config.inc.sh file and repositories with code.
-2. Create a new user with sudo permissions or use the existing one (the default user is "gis"). Keep in mind that the best practice is to use this username for creating a Postgres role and database.
-3. Clone 3 repositories (geocint-runner, geocint-openstreetmap, your custom repo) to working directory. If don't have a custom repo, please see "How to create your custom part of pipeline" below.
+2. Create a new user with sudo permissions or use the existing one (the default user is "gis").
+3. Clone 3 repositories (geocint-runner, geocint-mapaction-osm, geocint-mapaction) to working directory.
 ```bash
     cd /your_working_directory/
 	git clone https://github.com/konturio/geocint-runner.git
-	git clone https://github.com/konturio/geocint-openstreetmap.git	
+	git clone https://github.com/mapaction/geocint-mapaction-osm
+	git clone https://github.com/mapaction/geocint-mapaction
 
     # to switch to release branch use
 	cd /your_working_directory/geocint-runner && git checkout (name of the last release branch)
-	cd /your_working_directory/geocint-openstreetmap && git checkout (name of the last release branch)
+	cd /your_working_directory/geocint-mapaction-osm && git checkout (name of the last release branch)
+	cd /your_working_directory/geocint-mapaction && git checkout (name of the last release branch)
 ```
 4. The geocint pipeline can [send messages](https://api.slack.com/messaging/sending) to the Slack channel.
 The Slack integration is an optional part, you can safely skip it and add it later if needed. To set slack integration you should:
@@ -148,12 +144,17 @@ Create/adjust nginx configuration, e.g. the default one:
 ```
 	sudo nano /etc/nginx/sites-available/default
 ```
-the location section should look like this
 
+**remember to comment out the root that comes with the default file** on the above path
+
+```bash
+# root /var/www/html;
+```
+the location section should look like this
 ```
     location / {
-        access_log /home/gis/domlogs/access.log combined_ssl buffer=4k flush=5s;
-        error_log /home/gis/domlogs/error.log warn;
+        access_log /your_working_directory/domlogs/access.log combined buffer=4k flush=5s;
+        error_log /your_working_directory/domlogs/error.log warn;
 
         root /your_working_directory/public_html;
         try_files $uri $uri/ =404;
@@ -303,18 +304,6 @@ You can read more about target's dependencies(prerequisites) in the official [GN
 
 `/your_working_directory/geocint/make.lock` is a special temporary file that is created automatically after the pipeline starts and is deleted after the pipeline ends.
 Bash uses the make.lock file to avoid duplicating a running pipeline.
-
-### User schemas in database
-
-User schemas can be used for a separate pipeline and dev data.
-Run [scripts/create_geocint_user.sh](scripts/create_geocint_user.sh) to initialize the user schema.
-
-`sudo scripts/create_geocint_user.sh [username]`
-
-This is a script for adding user role and schema to geocint database. If no username is provided, it will be prompted. User roles
-are added to the geocint_users group role. You need to add the following line to pg_hba.conf.
-
-`local   gis +geocint_users  trust`
 
 ### How to analyse build time for targets
 
