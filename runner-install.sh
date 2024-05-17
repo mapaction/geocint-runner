@@ -3,7 +3,7 @@
 # Installing make-profiler
 sudo apt update -y && sudo apt upgrade -y 
 sudo apt install -y python3-pip graphviz gawk
-pip3 install slack slackclient
+pip3 install slack slackclient beautifulsoup4
 sudo pip3 install https://github.com/konturio/make-profiler/archive/master.zip
 sudo apt-get install -y cmake
 sudo apt install -y unzip
